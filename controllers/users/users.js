@@ -35,17 +35,34 @@ const registerCtrl = async (req, res, next) => {
 };
 
 //login
-const loginCtrl = async (req, res) => {
+const loginCtrl = async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return next(appErr("Email and password fields are required"));
+  }
   try {
+    //Check if email exist
+    const userFound = await User.findOne({ email });
+    if (!userFound) {
+      //throw an error
+      // return res.json({ status: "failed", data: "Invalid login credentials" });
+      return next(appErr("Invalid login credentials"));
+    }
+    //verify password
+    const isPasswordValid = await bcrypt.compare(password, userFound.password);
+    if (!isPasswordValid) {
+      //throw an error
+      // return res.json({ status: "failed", data: "Invalid login credentials" });
+      return next(appErr("Invalid login credentials"));
+    }
     res.json({
       status: "success",
-      user: "User login",
+      data: userFound,
     });
   } catch (error) {
     res.json(error);
   }
 };
-
 //details
 const userDetailsCtrl = async (req, res) => {
   try {
