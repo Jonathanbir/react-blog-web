@@ -10,7 +10,7 @@ const app = express();
 
 //middlewares
 //-------
-//users route
+app.use(express.json()); //pass incoming data
 
 //users route
 app.use("/api/v1/users", userRoutes);
