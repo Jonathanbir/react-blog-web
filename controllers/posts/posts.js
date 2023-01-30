@@ -41,7 +41,7 @@ const createPostCtrl = async (req, res, next) => {
 //all
 const fetchPostsCtrl = async (req, res, next) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate("comments");
     res.json({
       status: "success",
       user: posts,
@@ -57,7 +57,7 @@ const fetchPostCtrl = async (req, res, next) => {
     //get the id form params
     const id = req.params.id;
     //find the post
-    const post = await Post.findById(id);
+    const post = await Post.findById(id).populate("comments");
     res.json({
       status: "success",
       user: post,
