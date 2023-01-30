@@ -86,11 +86,28 @@ const deletePostCtrl = async (req, res, next) => {
 };
 
 //update
-const updatepostCtrl = async (req, res) => {
+const updatepostCtrl = async (req, res, next) => {
+  const { title, description, category } = req.body;
   try {
+    //find the post
+    const post = await Post.findById(req.params.id);
+    if (post.user.toString() !== req.session.userAuth.toString()) {
+      return next(appErr("您沒有更改此post的權限", 403));
+    }
+    //update
+    const postUpdated = await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        description,
+        category,
+        image: req.file.path,
+      },
+      { new: true }
+    );
     res.json({
       status: "success",
-      user: "Post updated",
+      data: postUpdated,
     });
   } catch (error) {
     res.json(error);
