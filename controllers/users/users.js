@@ -68,9 +68,13 @@ const loginCtrl = async (req, res, next) => {
 //details
 const userDetailsCtrl = async (req, res) => {
   try {
+    //get userId from params
+    const userId = req.params.id;
+    //find the user
+    const user = await User.findById(userId);
     res.json({
       status: "success",
-      user: "User Details",
+      data: user,
     });
   } catch (error) {
     res.json(error);
