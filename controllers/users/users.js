@@ -122,14 +122,31 @@ const uploadCoverImgCtrl = async (req, res) => {
 };
 
 //update password
-const updatePasswordCtrl = async (req, res) => {
+const updatePasswordCtrl = async (req, res, next) => {
+  console.log(req.params);
+  const { password } = req.body;
   try {
-    res.json({
-      status: "success",
-      user: "User password update",
-    });
+    //Check if user is updating the password
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const passswordHashed = await bcrypt.hash(password, salt);
+      //update user
+      await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          password: passswordHashed,
+        },
+        {
+          new: true,
+        }
+      );
+      res.json({
+        status: "success",
+        user: "Password has been changed successfully",
+      });
+    }
   } catch (error) {
-    res.json(error);
+    return next(appErr("Please provide password field"));
   }
 };
 
