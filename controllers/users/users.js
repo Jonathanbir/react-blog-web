@@ -76,12 +76,17 @@ const userDetailsCtrl = async (req, res) => {
     res.json(error);
   }
 };
+
 //profile
 const profileCtrl = async (req, res) => {
   try {
+    //get the login user
+    const userID = req.session.userAuth;
+    //find the user
+    const user = await User.findById(userID);
     res.json({
       status: "success",
-      user: "User profile",
+      data: user,
     });
   } catch (error) {
     res.json(error);
