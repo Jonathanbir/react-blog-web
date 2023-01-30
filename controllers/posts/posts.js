@@ -34,19 +34,20 @@ const createPostCtrl = async (req, res, next) => {
       user: postCreated,
     });
   } catch (error) {
-    res.json(error);
+    next(appErr(error.message));
   }
 };
 
 //all
-const fetchPostsCtrl = async (req, res) => {
+const fetchPostsCtrl = async (req, res, next) => {
   try {
+    const posts = await Post.find();
     res.json({
       status: "success",
-      user: "Posts list",
+      user: posts,
     });
   } catch (error) {
-    res.json(error);
+    next(appErr(error.message));
   }
 };
 
