@@ -71,11 +71,11 @@ const fetchPostCtrl = async (req, res, next) => {
 const deletePostCtrl = async (req, res, next) => {
   try {
     //find the post
-    // const deletePost = await Post.findByIdAndDelete(req.params.id); 會有不同人誤刪狀況
     const post = await Post.findById(req.params.id);
     if (post.user.toString() !== req.session.userAuth.toString()) {
       return next(appErr("您沒有刪除此post的權限", 403));
     }
+    await Post.findByIdAndDelete(req.params.id);
     res.json({
       status: "success",
       user: "Post 已被刪除成功",

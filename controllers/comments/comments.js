@@ -48,10 +48,16 @@ const commentDetailsCtrl = async (req, res) => {
 
 //delete
 const deleteCommentCtrl = async (req, res) => {
+  //find the post
+  const comment = await Comment.findById(req.params.id);
+  if (comment.user.toString() !== req.session.userAuth.toString()) {
+    return next(appErr("您沒有刪除此comment的權限", 403));
+  }
+  await Comment.findByIdAndDelete(req.params.id);
   try {
     res.json({
       status: "success",
-      user: "comment deleted",
+      data: "Comment 已經被刪除",
     });
   } catch (error) {
     res.json(error);
