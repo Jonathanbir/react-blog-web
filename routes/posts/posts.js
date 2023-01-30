@@ -6,11 +6,12 @@ const {
   fetchPostsCtrl,
   updatepostCtrl,
 } = require("../../controllers/posts/posts");
+const protected = require("../../middlewares/protected");
 
 const postRoutes = express.Router();
 
 //POST/api/v1/posts
-postRoutes.post("/", createPostCtrl);
+postRoutes.post("/", protected, createPostCtrl);
 
 //GET/api/v1/posts
 postRoutes.get("/", fetchPostsCtrl);
