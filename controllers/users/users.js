@@ -110,7 +110,6 @@ const uploadProfilePhotoCtrl = async (req, res) => {
 };
 
 //upload cover image
-
 const uploadCoverImgCtrl = async (req, res) => {
   try {
     res.json({
@@ -135,14 +134,33 @@ const updatePasswordCtrl = async (req, res) => {
 };
 
 //update user
-const updateUserCtrl = async (req, res) => {
+const updateUserCtrl = async (req, res, next) => {
+  const { fullname, email } = req.body;
   try {
+    //Check if email is not taken
+    if (email) {
+      const emailTaken = await User.findOne({ email });
+      if (emailTaken) {
+        return next(appErr("Email is taken", 400));
+      }
+    }
+    //update the user
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        fullname,
+        email,
+      },
+      {
+        new: true,
+      }
+    );
     res.json({
       status: "success",
-      user: "User  update",
+      data: user,
     });
   } catch (error) {
-    res.json(error);
+    res.json(next(appErr(error.message)));
   }
 };
 
