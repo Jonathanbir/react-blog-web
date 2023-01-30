@@ -55,6 +55,7 @@ const loginCtrl = async (req, res, next) => {
       // return res.json({ status: "failed", data: "Invalid login credentials" });
       return next(appErr("Invalid login credentials"));
     }
+    req.session.userAuth = userFound._id;
     res.json({
       status: "success",
       data: userFound,
@@ -63,6 +64,7 @@ const loginCtrl = async (req, res, next) => {
     res.json(error);
   }
 };
+
 //details
 const userDetailsCtrl = async (req, res) => {
   try {
