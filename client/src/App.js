@@ -5,6 +5,7 @@ import Layout from "./components/Layout";
 import HomeComponent from "./components/HomeComponent";
 import RegisterComponent from "./components/RegisterComponent";
 import LoginComponent from "./components/LoginComponent";
+import ProfileComponent from "./components/ProfileComponent";
 
 function App() {
   let [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());
@@ -29,7 +30,7 @@ function App() {
               />
             }
           />
-          {/* <Route
+          <Route
             path="profile"
             element={
               <ProfileComponent
@@ -38,7 +39,7 @@ function App() {
               />
             }
           />
-          <Route
+          {/*   <Route
             path="course"
             element={
               <CourseComponent

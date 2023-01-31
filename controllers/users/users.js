@@ -32,7 +32,7 @@ const registerCtrl = async (req, res, next) => {
     });
     res.json({
       status: "success",
-      data: user,
+      user: user,
     });
   } catch (e) {
     res.json(e);
@@ -62,7 +62,7 @@ const loginCtrl = async (req, res, next) => {
     req.session.userAuth = userFound._id;
     res.json({
       status: "success",
-      data: userFound,
+      user: userFound,
     });
   } catch (e) {
     return res.status(500).send(e);
