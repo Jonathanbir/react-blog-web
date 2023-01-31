@@ -95,13 +95,13 @@ export const NavComponent = ({ currentUser, setCurrentUser }) => {
             aria-expanded="false"
           >
             <img
-              src="https://github.com/mdo.png"
+              src={currentUser.user.profileImage}
               alt=""
               width="32"
               height="32"
               className="rounded-circle me-2"
             />
-            <strong>mdo</strong>
+            <strong>{currentUser.user.fullname}</strong>
           </a>
           <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
             <li>

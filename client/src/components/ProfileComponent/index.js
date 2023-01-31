@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import AuthService from "../../services/auth.service";
+import "./index.scss";
 
 const ProfileComponent = ({ currentUser, setCurrentUser }) => {
   console.log(currentUser);
@@ -8,13 +9,19 @@ const ProfileComponent = ({ currentUser, setCurrentUser }) => {
       {!currentUser && <div>在獲取您的個人資料之前，您必須先登錄。</div>}
       {currentUser && (
         <div>
-          <h2>以下是您的個人檔案：</h2>
-
           <table className="table">
             <tbody>
               <tr>
                 <td>
                   <strong>姓名：{currentUser.user.fullname}</strong>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <img
+                    className="profile-image"
+                    src={currentUser.user.profileImage}
+                  />
                 </td>
               </tr>
               <tr>
