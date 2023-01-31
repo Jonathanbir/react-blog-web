@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import AuthService from "../../services/auth.service";
 import "./index.scss";
 
@@ -94,14 +96,21 @@ export const NavComponent = ({ currentUser, setCurrentUser }) => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <img
-              src={currentUser.user.profileImage}
-              alt=""
-              width="32"
-              height="32"
-              className="rounded-circle me-2"
-            />
-            <strong>{currentUser.user.fullname}</strong>
+            {currentUser ? (
+              <img
+                src={currentUser.user.profileImage}
+                alt=""
+                width="32"
+                height="32"
+                className="rounded-circle me-2"
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                style={{ fontSize: "30px" }}
+              />
+            )}
+            <strong>{currentUser && currentUser.user.fullname}</strong>
           </a>
           <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
             <li>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../../services/auth.service";
+import "./index.scss";
 
 const LoginComponent = ({ currentUser, setCurrentUser }) => {
   const nagivate = useNavigate();
