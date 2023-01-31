@@ -6,12 +6,14 @@ const globalErrHandler = require("./middlewares/globalHandler");
 const commentRoutes = require("./routes/comments/comment");
 const postRoutes = require("./routes/posts/posts");
 const userRoutes = require("./routes/users/users");
+const cors = require("cors");
 
 require("./config/dbConnect");
 
 const app = express();
 
 //middlewares
+app.use(cors());
 //configure ejs
 app.set("view engine", "ejs");
 //serve static files
@@ -43,5 +45,5 @@ app.use("/api/v1/comments", commentRoutes);
 //Error handler middlewares
 app.use(globalErrHandler);
 //listen server
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Servver is running on PORT ${PORT}`));

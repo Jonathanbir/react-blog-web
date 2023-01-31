@@ -4,9 +4,9 @@ const appErr = require("../../utils/appErr");
 
 //register
 const registerCtrl = async (req, res, next) => {
-  const { fullname, email, password } = req.body;
+  const { fullname, email, password, role } = req.body;
   //check if field is empty
-  if (!fullname || !email || !password) {
+  if (!fullname || !email || !password || !role) {
     return next(appErr("All fields are required"));
   }
   try {
@@ -14,7 +14,7 @@ const registerCtrl = async (req, res, next) => {
     const userFound = await User.findOne({ email });
     //throw an error
     if (userFound) {
-      return next(appErr("User already Exists"));
+      return next(appErr("此信箱已經被註冊過了。。。"));
     }
     //Hash passsword
     const salt = await bcrypt.genSalt(10);
@@ -24,6 +24,7 @@ const registerCtrl = async (req, res, next) => {
       fullname,
       email,
       password: passswordHashed,
+      role,
     });
     res.json({
       status: "success",
@@ -189,7 +190,7 @@ const updatePasswordCtrl = async (req, res, next) => {
 
 //update user
 const updateUserCtrl = async (req, res, next) => {
-  const { fullname, email } = req.body;
+  const { fullname, email, role } = req.body;
   try {
     //Check if email is not taken
     if (email) {
@@ -204,6 +205,7 @@ const updateUserCtrl = async (req, res, next) => {
       {
         fullname,
         email,
+        role,
       },
       {
         new: true,
