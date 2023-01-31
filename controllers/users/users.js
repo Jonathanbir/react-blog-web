@@ -1,9 +1,14 @@
 const bcrypt = require("bcryptjs");
 const User = require("../../models/user/User");
-const appErr = require("../../utils/appErr");
+const registerValidation = require("../../validation").registerValidation;
+const loginValidation = require("../../validation").loginValidation;
 
 //register
 const registerCtrl = async (req, res, next) => {
+  //確認數據是否符合規範
+  let { error } = registerValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
   const { fullname, email, password, role } = req.body;
   //check if field is empty
   if (!fullname || !email || !password || !role) {
@@ -12,7 +17,6 @@ const registerCtrl = async (req, res, next) => {
   try {
     //1. check if user exist (email)
     const userFound = await User.findOne({ email });
-    //throw an error
     if (userFound) {
       return res.status(401).send("此信箱已經被註冊過了。。。");
     }
@@ -30,13 +34,16 @@ const registerCtrl = async (req, res, next) => {
       status: "success",
       data: user,
     });
-  } catch (error) {
-    res.json(error);
+  } catch (e) {
+    res.json(e);
   }
 };
 
 //login
 const loginCtrl = async (req, res, next) => {
+  //確認數據是否符合規範
+  let { error } = loginValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(401).send("電子信箱及密碼為必填");
@@ -57,8 +64,8 @@ const loginCtrl = async (req, res, next) => {
       status: "success",
       data: userFound,
     });
-  } catch (error) {
-    return res.status(500).send(err);
+  } catch (e) {
+    return res.status(500).send(e);
   }
 };
 
@@ -73,8 +80,8 @@ const userDetailsCtrl = async (req, res) => {
       status: "success",
       data: user,
     });
-  } catch (error) {
-    res.json(error);
+  } catch (e) {
+    res.json(e);
   }
 };
 
@@ -91,8 +98,8 @@ const profileCtrl = async (req, res) => {
       status: "success",
       data: user,
     });
-  } catch (error) {
-    res.json(error);
+  } catch (e) {
+    res.json(e);
   }
 };
 
@@ -105,7 +112,7 @@ const uploadProfilePhotoCtrl = async (req, res, next) => {
     const userFound = await User.findById(userId);
     //2. check if user is found
     if (!userFound) {
-      return next(appErr("User not found", 403));
+      return res.status(403).send("沒有此用戶");
     }
     //5.Update profile photo
     const userUpdated = await User.findByIdAndUpdate(
@@ -121,8 +128,8 @@ const uploadProfilePhotoCtrl = async (req, res, next) => {
       status: "success",
       data: userUpdated,
     });
-  } catch (error) {
-    next(appErr(error.message));
+  } catch (e) {
+    return res.status(404).send(e.message);
   }
 };
 //upload cover image
@@ -134,7 +141,7 @@ const uploadCoverImgCtrl = async (req, res) => {
     const userFound = await User.findById(userId);
     //2. check if user is found
     if (!userFound) {
-      return next(appErr("User not found", 403));
+      return res.status(403).send("沒有此用戶");
     }
     //5.Update profile photo
     const userUpdated = await User.findByIdAndUpdate(
@@ -150,8 +157,8 @@ const uploadCoverImgCtrl = async (req, res) => {
       status: "success",
       data: userUpdated,
     });
-  } catch (error) {
-    next(appErr(error.message));
+  } catch (e) {
+    return res.status(500).send(e);
   }
 };
 
@@ -176,11 +183,11 @@ const updatePasswordCtrl = async (req, res, next) => {
       );
       res.json({
         status: "success",
-        user: "Password has been changed successfully",
+        user: "密碼更改成功",
       });
     }
-  } catch (error) {
-    return next(appErr("Please provide password field"));
+  } catch (e) {
+    return res.status(401).send("請確認密碼");
   }
 };
 
@@ -192,7 +199,7 @@ const updateUserCtrl = async (req, res, next) => {
     if (email) {
       const emailTaken = await User.findOne({ email });
       if (emailTaken) {
-        return next(appErr("Email is taken", 400));
+        return res.status(400).send("此信箱已有人註冊");
       }
     }
     //update the user
@@ -211,8 +218,8 @@ const updateUserCtrl = async (req, res, next) => {
       status: "success",
       data: user,
     });
-  } catch (error) {
-    res.json(next(appErr(error.message)));
+  } catch (e) {
+    return res.status(404).send(e.message);
   }
 };
 
@@ -223,8 +230,8 @@ const logoutCtrl = async (req, res) => {
       status: "success",
       user: "User logout",
     });
-  } catch (error) {
-    res.json(error);
+  } catch (e) {
+    res.json(e);
   }
 };
 
