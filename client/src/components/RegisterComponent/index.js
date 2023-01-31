@@ -42,7 +42,10 @@ const RegisterComponent = () => {
   };
 
   return (
-    <div style={{ padding: "3rem" }} className="col-md-10">
+    <div
+      style={{ padding: "3rem" }}
+      className="col-md-10  d-flex justify-content-center align-items-center"
+    >
       <div>
         {message && <div className="alert alert-danger">{message}</div>}
         <div>
@@ -87,7 +90,10 @@ const RegisterComponent = () => {
           />
         </div>
         <br />
-        <button onClick={handleRegister} className="btn btn-primary">
+        <button
+          onClick={handleRegister}
+          className="btn btn-primary d-flex mx-auto"
+        >
           <span>註冊會員</span>
         </button>
       </div>

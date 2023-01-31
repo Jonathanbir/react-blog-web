@@ -6,9 +6,10 @@ import "./index.scss";
 export const NavComponent = ({ currentUser, setCurrentUser }) => {
   const handleLogout = () => {
     AuthService.logout(); // 清空local storage
-    window.alert("登出成功!現在您會被導向到首頁。");
+    window.alert("登出成功!。");
     setCurrentUser(null);
   };
+
   return (
     <div className="navigation col-md-2">
       <ul className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark vh-100">
@@ -20,24 +21,17 @@ export const NavComponent = ({ currentUser, setCurrentUser }) => {
         </a>
         <hr />
         <ul className="nav nav-pills flex-column mb-auto">
-          <li className="nav-item">
-            <Link className="nav-link active" to="/">
-              首頁
-            </Link>
-          </li>
-
+          {!currentUser && (
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                會員登入
+              </Link>
+            </li>
+          )}
           {!currentUser && (
             <li className="nav-item">
               <Link className="nav-link" to="/register">
                 註冊會員
-              </Link>
-            </li>
-          )}
-
-          {!currentUser && (
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">
-                會員登入
               </Link>
             </li>
           )}

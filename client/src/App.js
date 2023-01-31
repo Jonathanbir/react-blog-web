@@ -9,7 +9,7 @@ import ProfileComponent from "./components/ProfileComponent";
 
 function App() {
   let [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());
-
+  console.log("currentUser", currentUser);
   return (
     <BrowserRouter>
       <Routes>
@@ -19,27 +19,32 @@ function App() {
             <Layout currentUser={currentUser} setCurrentUser={setCurrentUser} />
           }
         >
-          <Route index element={<HomeComponent />} />
-          <Route path="register" element={<RegisterComponent />} />
-          <Route
-            path="login"
-            element={
-              <LoginComponent
-                currentUser={currentUser}
-                setCurrentUser={setCurrentUser}
+          {!currentUser ? (
+            <>
+              <Route
+                path="/"
+                element={
+                  <LoginComponent
+                    currentUser={currentUser}
+                    setCurrentUser={setCurrentUser}
+                  />
+                }
               />
-            }
-          />
-          <Route
-            path="profile"
-            element={
-              <ProfileComponent
-                currentUser={currentUser}
-                setCurrentUser={setCurrentUser}
+              <Route path="/register" element={<RegisterComponent />} />
+            </>
+          ) : (
+            <>
+              <Route index element={<HomeComponent />} />
+              <Route
+                path="profile"
+                element={
+                  <ProfileComponent
+                    currentUser={currentUser}
+                    setCurrentUser={setCurrentUser}
+                  />
+                }
               />
-            }
-          />
-          {/*   <Route
+              {/*   <Route
             path="course"
             element={
               <CourseComponent
@@ -66,6 +71,8 @@ function App() {
               />
             }
           /> */}
+            </>
+          )}
         </Route>
       </Routes>
     </BrowserRouter>

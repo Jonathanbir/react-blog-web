@@ -31,10 +31,13 @@ const LoginComponent = ({ currentUser, setCurrentUser }) => {
   };
 
   return (
-    <div style={{ padding: "3rem" }} className="col-md-10">
+    <div
+      style={{ padding: "3rem" }}
+      className="col-md-10 d-flex justify-content-center align-items-center"
+    >
       <div>
         {message && <div className="alert alert-danger">{message}</div>}
-        <div className="form-group">
+        <div className="form-group w-100">
           <label htmlFor="username">電子信箱：</label>
           <input
             onChange={handleEmail}
@@ -55,7 +58,10 @@ const LoginComponent = ({ currentUser, setCurrentUser }) => {
         </div>
         <br />
         <div className="form-group">
-          <button onClick={handleLogin} className="btn btn-primary btn-block">
+          <button
+            onClick={handleLogin}
+            className="btn btn-primary d-flex mx-auto"
+          >
             <span>登入系統</span>
           </button>
         </div>
