@@ -12,18 +12,22 @@ const RegisterComponent = () => {
 
   const handleUsername = (e) => {
     setUsername(e.target.value);
+    setMessage("");
   };
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
+    setMessage("");
   };
 
   const handlePassword = (e) => {
     setPassword(e.target.value);
+    setMessage("");
   };
 
   const handleRole = (e) => {
     setRole(e.target.value);
+    setMessage("");
   };
 
   const handleRegister = () => {

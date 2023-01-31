@@ -7,14 +7,14 @@ const registerCtrl = async (req, res, next) => {
   const { fullname, email, password, role } = req.body;
   //check if field is empty
   if (!fullname || !email || !password || !role) {
-    return next(appErr("All fields are required"));
+    return res.status(401).send("每個項目都為必填");
   }
   try {
     //1. check if user exist (email)
     const userFound = await User.findOne({ email });
     //throw an error
     if (userFound) {
-      return next(appErr("此信箱已經被註冊過了。。。"));
+      return res.status(401).send("此信箱已經被註冊過了。。。");
     }
     //Hash passsword
     const salt = await bcrypt.genSalt(10);
@@ -39,22 +39,18 @@ const registerCtrl = async (req, res, next) => {
 const loginCtrl = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return next(appErr("Email and password fields are required"));
+    return res.status(401).send("電子信箱及密碼為必填");
   }
   try {
-    //Check if email exist
+    //檢查帳號是否存在
     const userFound = await User.findOne({ email });
     if (!userFound) {
-      //throw an error
-      // return res.json({ status: "failed", data: "Invalid login credentials" });
-      return next(appErr("Invalid login credentials"));
+      return res.status(401).send("無法找到使用者。請確認信箱是否正確。");
     }
-    //verify password
+    //密碼檢驗
     const isPasswordValid = await bcrypt.compare(password, userFound.password);
     if (!isPasswordValid) {
-      //throw an error
-      // return res.json({ status: "failed", data: "Invalid login credentials" });
-      return next(appErr("Invalid login credentials"));
+      return res.status(401).send("密碼錯誤");
     }
     req.session.userAuth = userFound._id;
     res.json({
@@ -62,7 +58,7 @@ const loginCtrl = async (req, res, next) => {
       data: userFound,
     });
   } catch (error) {
-    res.json(error);
+    return res.status(500).send(err);
   }
 };
 

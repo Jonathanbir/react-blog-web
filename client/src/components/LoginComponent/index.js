@@ -10,9 +10,11 @@ const LoginComponent = ({ currentUser, setCurrentUser }) => {
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
+    setMessage("");
   };
   const handlePassword = (e) => {
     setPassword(e.target.value);
+    setMessage("");
   };
 
   const handleLogin = async () => {
